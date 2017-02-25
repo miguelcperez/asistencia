@@ -1,0 +1,28 @@
+#SchedulePanel {
+	.panel-body {
+		.btn-default {
+			border-color: transparent;
+			background-color: #E6E6E6;
+			&:hover {
+				background-color: #8AB2F7;	
+			}
+			&:focus, .focus{
+				border-color: transparent;
+				outline: 0;
+			}
+		}
+		.active {
+			background-color: blue;
+			color: white;
+			&:hover {
+				background-color: blue;
+			}
+		}
+	}
+
+}
+
+#BtnSave {
+	margin-top: 30px;
+}
+
