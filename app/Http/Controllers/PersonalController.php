@@ -13,6 +13,7 @@ class PersonalController extends Controller
     }
     public function create(Request $request) 
     {
+        return dd($request->all());
     	$request_data = $request->all();
     	$personal = Personal::Create([
     		'code' => $request_data['code'],
