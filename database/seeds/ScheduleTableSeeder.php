@@ -12,35 +12,21 @@ class ScheduleTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Schedule::class)->create([
-    		'day' => 'Lunes',
-    		'init_hour' => '07:00:00',
-    		'end_hour' => '08:00:00'
-    	]);
-    	factory(Schedule::class)->create([
-    		'day' => 'Lunes',
-    		'init_hour' => '08:00:00',
-    		'end_hour' => '09:00:00'
-    	]);
-    	factory(Schedule::class)->create([
-    		'day' => 'Lunes',
-    		'init_hour' => '09:00:00',
-    		'end_hour' => '10:00:00'
-    	]);
-    	factory(Schedule::class)->create([
-    		'day' => 'Lunes',
-    		'init_hour' => '10:00:00',
-    		'end_hour' => '11:00:00'
-    	]);
-    	factory(Schedule::class)->create([
-    		'day' => 'Lunes',
-    		'init_hour' => '11:00:00',
-    		'end_hour' => '12:00:00'
-    	]);
-    	factory(Schedule::class)->create([
-    		'day' => 'Lunes',
-    		'init_hour' => '12:00:00',
-    		'end_hour' => '13:00:00'
-    	]);
+		$days = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
+
+		foreach ($days as $day) {
+
+			foreach (range(7, 12) as $hour) {
+
+                $endHour = $hour + 1;
+
+                Schedule::create([
+                    'day' => $day,
+                    'init_hour' => "$hour:00:00",
+                    'end_hour' => "$endHour:00:00"
+                ]);
+			}
+
+		}
     }
 }

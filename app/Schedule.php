@@ -12,6 +12,6 @@ class Schedule extends Model
     ];
     public function personal() 
     {
-    	return $this->belongsToMany('App\Personal');
+    	return $this->belongsToMany('App\Personal', 'schedule_personal');
     }
 }
