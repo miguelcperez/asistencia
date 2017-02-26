@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', 'AttendanceController@index');
 
 Route::get('registro', 'PersonalController@index');
 Route::post('registro', 'PersonalController@create');
