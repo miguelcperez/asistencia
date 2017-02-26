@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'AttendanceController@index');
+Route::get('/personal/today', 'AttendanceController@personalToday');
 
 Route::get('registro', 'PersonalController@index');
 Route::post('registro', 'PersonalController@create');

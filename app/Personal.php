@@ -12,6 +12,6 @@ class Personal extends Model
     ];
     public function schedules() 
     {
-    	return $this->belongsToMany('App\Schedule', 'schedule_personal');
+    	return $this->belongsToMany('App\Schedule', 'schedule_personal')->withTimestamps();
     }
 }
