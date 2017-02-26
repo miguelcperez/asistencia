@@ -16,6 +16,7 @@ $factory->define(App\Personal::class, function (Faker\Generator $faker) {
     return [
     	'code' => $faker->randomNumber($nbDigits = 4),
         'name' => $faker->name,
+        'payperhour' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 100)
     ];
 });
 

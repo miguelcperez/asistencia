@@ -16,7 +16,8 @@ class CreatePersonalTable extends Migration
         Schema::create('personal', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique();
-            $table->string('name')->unique();
+            $table->string('name');
+            $table->decimal('payperhour', 5,2);
             $table->timestamps();
         });
     }

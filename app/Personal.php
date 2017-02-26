@@ -8,7 +8,7 @@ class Personal extends Model
 {
 	public $table = "personal";
     protected $fillable = [
-        'code', 'name',
+        'code', 'name', 'payperhour'
     ];
     public function schedules() 
     {

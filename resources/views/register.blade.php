@@ -19,15 +19,21 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label for="code" class="col-sm-4 control-label">Codigo</label>
+							<label for="Code" class="col-sm-4 control-label">Codigo</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="code" name="code" placeholder="Codigo de Personal">
+								<input type="text" class="form-control" id="Code" name="code" placeholder="Codigo de Personal" required>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-sm-4 control-label">Apellidos y Nombres</label>
+							<label for="Name" class="col-sm-4 control-label">Apellidos y Nombres</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="name" name="name" placeholder="Apellidos y Nombres">
+								<input type="text" class="form-control" id="Name" name="name" placeholder="Apellidos y Nombres" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="PayPerHour" class="col-sm-4 control-label">Pago por Hora</label>
+							<div class="col-md-5">
+								<input type="text" class="form-control" id="PayPerHour" name="payperhour" placeholder="Pago por Hora" required>
 							</div>
 						</div>
 					</div>
@@ -41,12 +47,12 @@
 					<div class="panel-body text-center">
 						<div class="col-sm-2" data-toggle="button">
 							<h4>Lunes</h4>
-							<button type="button" class="btn btn-default btn-block"  onclick = "selectHour()">7:00 - 8:00</button>
-							<button type="button" class="btn btn-default btn-block" onclick = "selectHour()">8:00 - 9:00</button>
-							<button type="button" class="btn btn-default btn-block" onclick = "selectHour()">9:00 - 10:00</button>
-							<button type="button" class="btn btn-default btn-block" onclick = "selectHour()">10:00 - 11:00</button>
-							<button type="button" class="btn btn-default btn-block" onclick = "selectHour()">11:00 - 12:00</button>
-							<button type="button" class="btn btn-default btn-block" onclick = "selectHour()">12:00 - 13:00</button>
+							<button type="button" class="btn btn-default btn-block" id="1">7:00 - 8:00</button>
+							<button type="button" class="btn btn-default btn-block" id="2">8:00 - 9:00</button>
+							<button type="button" class="btn btn-default btn-block" id="3">9:00 - 10:00</button>
+							<button type="button" class="btn btn-default btn-block" id="4">10:00 - 11:00</button>
+							<button type="button" class="btn btn-default btn-block" id="5">11:00 - 12:00</button>
+							<button type="button" class="btn btn-default btn-block" id="6">12:00 - 13:00</button>
 						</div>
 						<div class="col-sm-2" data-toggle="button">
 							<h4>Martes</h4>
@@ -97,6 +103,9 @@
 							<button type="submit" id="BtnSave" class="btn btn-primary btn-block">
 								GUARDAR
 							</button>
+							<div id="target">
+  Click here
+</div>
 						</div>
 					</div>
 				</div>
@@ -109,9 +118,15 @@
 @section('styles')
 @stop
 @section('scripts')
-<script type="text/javascript">
-	function selectHour() {
-		console.log('Seleccionado');
-	}
+<script>
+$(document).ready(function() {
+	$("#btn1").click(function() {
+		if($(this).hasClass('active')) {
+			console.log('quitar');
+		} else {
+			console.log('agregar');
+		}
+	});
+});
 </script>
 @stop
