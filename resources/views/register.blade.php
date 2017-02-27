@@ -5,9 +5,9 @@
 		<h1>Registro de Personal</h1>
 	</div>
 	<hr>
-	@if (session()->has('message'))
+	@if (session('message'))
 	    <div class="alert alert-success">
-	        {!! session('message') !!}
+	        {{ session('message') }}
 	    </div>
 	@endif
 	<div class="row">
@@ -21,19 +21,19 @@
 						<div class="form-group">
 							<label for="Code" class="col-sm-4 control-label">Codigo</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="Code" name="code" placeholder="Codigo de Personal" required>
+								<input type="text" class="form-control" id="Code" name="code" placeholder="Codigo de Personal" required autocomplete="off">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="Name" class="col-sm-4 control-label">Apellidos y Nombres</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="Name" name="name" placeholder="Apellidos y Nombres" required>
+								<input type="text" class="form-control" id="Name" name="name" placeholder="Apellidos y Nombres" required autocomplete="off">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="PayPerHour" class="col-sm-4 control-label">Pago por Hora</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="PayPerHour" name="payperhour" placeholder="Pago por Hora" required>
+								<input type="text" class="form-control" id="PayPerHour" name="payperhour" placeholder="Pago por Hora" required autocomplete="off">
 							</div>
 						</div>
 					</div>
@@ -107,6 +107,7 @@
 					</div>
 				</div>
 			</div>
+			<input type="hidden" name="hours_array" id="HoursArray">
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		</form>
 	</div>
@@ -118,25 +119,23 @@
 <script>
 $(document).ready(function() {
 	var array;
-	
-
 	$('.btn-hour').each(function(i) {
 		$(this).attr('id', i + 1);
 		console.log($(this).attr('id'));
 	});
-	$('#BtnSave').click(function() {
+	$('#Form-Register').submit(function(e) {
 		var form = $('#Form-Register')
-		var data = form.serializeArray();
+		var data;
 		array = [];
 		$('.btn-hour').each(function() {
 			if($(this).hasClass('active')) {
 				array.push($(this).attr('id'));
 			}
 		});
-		data.push(array);
-		alert(data);
-		$.post("/registro", data, function(result) {
-			console.log(data);
+		$('#HoursArray').val(array);
+		data = form.serializeArray();
+		$.post(form.attr('action'), data, function(result) {
+			alert('hola');
 		});
 	});
 });

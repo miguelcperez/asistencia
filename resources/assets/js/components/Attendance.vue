@@ -24,11 +24,11 @@
                 <tbody>
                     <tr v-for="user in users">
                         <td v-text="user.name"></td>
-                        <td v-text="user.starts"></td>
+                        <td v-text="user.entry"></td>
                         <td>
                             <button type="button" class="btn btn-default" @click="checkIn(user)">Marcar</button>
                         </td>
-                        <td v-text="user.ends"></td>
+                        <td v-text="user.exit"></td>
                         <td>
                             <button type="button" class="btn btn-default" @click="checkOut(user)">Marcar</button>
                         </td>
@@ -53,7 +53,7 @@
         mounted: function() {
             this.$http.get('/personal/today').then(response => {
                 response.body.forEach(user => {
-                    user.starts = user.ends = '';
+                    user.entry = user.exit = '';
                     user.justify = false;
                 });
 
@@ -69,10 +69,18 @@
         },
         methods: {
             checkIn: function (user) {
-                alert('CheckIn');
+                this.$http.post('/personal/check-in', {
+                    id: user.id
+                }).then(response => {
+                    user.entry = moment(response.body.created_at).format('LT');
+                });
             },
             checkOut: function (user) {
-                alert('CheckOut');
+                this.$http.post('/personal/check-out', {
+                    id: user.id
+                }).then(response => {
+                    user.exit = moment(response.body.created_at).format('LT');
+                });
             }
         }
     }
