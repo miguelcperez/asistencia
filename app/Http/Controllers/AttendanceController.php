@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Assist;
 use App\Personal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,5 +38,25 @@ class AttendanceController extends Controller
             ->get();
 
         return $users;
+    }
+
+    public function checkIn()
+    {
+        $this->validate(request(), ['id' => 'required|exists:personal,id']);
+
+        return Assist::create([
+            'personal_id' => request('id'),
+            'type'        => 'entry'
+        ]);
+    }
+
+    public function checkOut()
+    {
+        $this->validate(request(), ['id' => 'required|exists:personal,id']);
+
+        return Assist::create([
+            'personal_id' => request('id'),
+            'type'        => 'exit'
+        ]);
     }
 }

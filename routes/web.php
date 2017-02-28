@@ -13,6 +13,8 @@
 
 Route::get('/', 'AttendanceController@index');
 Route::get('/personal/today', 'AttendanceController@personalToday');
+Route::post('/personal/check-in', 'AttendanceController@checkIn');
+Route::post('/personal/check-out', 'AttendanceController@checkOut');
 
 Route::get('registro', 'PersonalController@index');
 Route::post('registro', 'PersonalController@create');
