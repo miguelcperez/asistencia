@@ -19,16 +19,19 @@ class PersonalController extends Controller
             'name' => 'required|string',
             'payperhour' => 'required|numeric'
         ]);
+
         $ids = explode(',', $request->hours_array);
     	$personal = Personal::create([
     		'code' => $request->code,
     		'name' => $request->name,
-    		'payperhour' => $request->payperhour
+    		'payperhour' => $request->payperhour,
     	]);
+
         foreach($ids as $id) {
            $horario = Schedule::find($id);
            $personal->schedules()->attach($horario);
         }
+        
     	return redirect('registro')->with('message', 'Registrado Correctamente');
     }
 }

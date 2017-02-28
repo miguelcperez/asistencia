@@ -29,12 +29,12 @@ class AttendanceController extends Controller
 
         $today = Carbon::now()->format('l');
 
-        $users = DB::table('personal')
+        $users = \DB::table('personal')
             ->join('schedule_personal', 'personal.id', '=', 'schedule_personal.personal_id')
             ->join('schedule', 'schedule.id', '=', 'schedule_personal.schedule_id')
             ->where('schedule.day', $weekdays[$today])
             ->groupBy('personal.id')
-            ->select('personal.*', 'schedule.init_hour', 'schedule.end_hour', 'schedule.day')
+            ->select('personal.*')
             ->get();
 
         return $users;
@@ -42,21 +42,27 @@ class AttendanceController extends Controller
 
     public function checkIn()
     {
+        $today = Carbon::now();
+        $hour = substr($today->toTimeString(),0,5);
         $this->validate(request(), ['id' => 'required|exists:personal,id']);
-
         return Assist::create([
             'personal_id' => request('id'),
-            'type'        => 'entry'
+            'type'        => 'entry', 
+            'hour'        => $hour, 
+            'discount'    => '0'
         ]);
     }
 
     public function checkOut()
     {
+        $today = Carbon::now();
+        $hour = substr($today->toTimeString(),0,5);
         $this->validate(request(), ['id' => 'required|exists:personal,id']);
-
         return Assist::create([
             'personal_id' => request('id'),
-            'type'        => 'exit'
+            'type'        => 'exit',
+            'hour'        => $hour,
+            'discount'    => '0'
         ]);
     }
 }

@@ -17,10 +17,16 @@ class CreateAssistsTable extends Migration
             $table->increments('id');
 
             $table->enum('type', ['entry', 'exit']);
+
+            $table->string('hour');
+            
+            $table->decimal('discount', 5,2)->default('0');
+
             $table->integer('personal_id')->unsigned();
 
             $table->foreign('personal_id')->references('id')
                 ->on('personal')->onDelete('cascade');
+
 
             $table->timestamps();
         });

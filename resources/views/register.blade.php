@@ -107,6 +107,15 @@
 					</div>
 				</div>
 			</div>
+			@if (count($errors) > 0)
+			    <div class="alert alert-danger">
+			        <ul>
+			            @foreach ($errors->all() as $error)
+			                <li>{{ $error }}</li>
+			            @endforeach
+			        </ul>
+			    </div>
+			@endif
 			<input type="hidden" name="hours_array" id="HoursArray">
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		</form>
@@ -134,9 +143,6 @@ $(document).ready(function() {
 		});
 		$('#HoursArray').val(array);
 		data = form.serializeArray();
-		$.post(form.attr('action'), data, function(result) {
-			alert('hola');
-		});
 	});
 });
 </script>

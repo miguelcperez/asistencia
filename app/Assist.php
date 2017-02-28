@@ -8,7 +8,7 @@ class Assist extends Model
 {
     protected $table = 'assists';
 
-    protected $fillable = ['type', 'personal_id'];
+    protected $fillable = ['type', 'hour', 'discount', 'personal_id'];
 
     public function personal()
     {

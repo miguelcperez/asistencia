@@ -19,6 +19,5 @@ Route::post('/personal/check-out', 'AttendanceController@checkOut');
 Route::get('registro', 'PersonalController@create');
 Route::post('registro', 'PersonalController@store');
 
-Route::get('/reporte', function() {
-	return view('report');
-});
+Route::get('reporte', 'ReportController@index');
+//Route::get('reporte', 'ReportController@show');

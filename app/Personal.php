@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Personal extends Model
 {
-	public $table = "personal";
+	protected $table = "personal";
 
     protected $fillable = [
         'code', 'name', 'payperhour'
