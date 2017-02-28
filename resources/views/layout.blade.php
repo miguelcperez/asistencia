@@ -7,6 +7,12 @@
         <title>Asistencia</title>
         <link rel="stylesheet" type="text/css" href="css/app.css">
         @yield('styles')
+
+        <script>
+            window.App = {
+                csrfToken: "{{ csrf_token() }}"
+            }
+        </script>
     </head>
     <body>
     <div id="app">
