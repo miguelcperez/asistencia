@@ -8,10 +8,6 @@
 	<div class="row" style="margin-bottom: 30px">
 		<div class="col-xs-4">
 			<select class="js-example-basic-single" style="width: 100%">
-				<option value="0">Elija un Trabajador</option>
-			    <option value="AL">Alabama</option>
-			        ...
-			    <option value="WY">Wyoming</option>
 			</select>
 		</div>
 		<div class="col-xs-1" style="text-align: right;">
@@ -47,24 +43,7 @@
 					<th>Detalles</th>
 				</tr>
 			</thead>
-			<tbody>
-				@foreach ($reports as $report)
-				<tr>
-					<td>{{ $report -> created_at }}</td>
-					<td>{{ $report -> name }}</td>
-					<td>{{ $report -> discount }}</td>
-					<td>
-						<button type="button" class="btn btn-default">
-							Ver
-						</button>
-					</td>
-				</tr>
-				@endforeach
-			</tbody>
 		</table>
-		<div class="col-md-12" style="text-align: right;">
-			{{ $reports->links() }}
-		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-4">
@@ -84,7 +63,33 @@
 <script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
-$(".js-example-basic-single").select2();
+	$.ajax({
+		type: 'GET',
+		url:'reporte/data',
+		dataType: 'json',
+	}).then(function(data) {
+		for(var i in data) {
+			var newOption = new Option(data[i].name, data[i].id, true, true);
+			$(".js-example-basic-single").append(newOption);
+		}
+	});
+	
+	$(".js-example-basic-single").select2({
+		
+	});
+	$(".js-example-basic-single").on("select2:select", function(e) {
+		var id = $(this).val();
+		$.ajax ({
+			type: "GET",
+			url: "reporte",
+			data: {
+				id: id
+			},
+			success: function (data) {
+				
+			}
+		});
+	});
 	$.fn.datepicker.dates['es'] = {
 	    days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
 	    daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
@@ -108,6 +113,9 @@ $(".js-example-basic-single").select2();
 	    autoclose: 'true'
 	});
 	$('#AssistanceTable').DataTable({
+			"processing": true,
+			"serverSide": true,
+	        "ajax": "reporte/personal",
 			"searching": false,
 			"paginate": false,
 			"info": false,
@@ -115,7 +123,7 @@ $(".js-example-basic-single").select2();
 	    	"language": {
 	            "lengthMenu": "Ver _MENU_ registros por página",
 	            "sSearch": "Buscar:",
-	            "Processing": "Procesando",
+	            "sProcessing": "Procesando",
 	            "zeroRecords": "No se encontraron resultados",
 	            "info": "Página _PAGE_ de _PAGES_",
 	            "infoEmpty": "No hay registros disponibles",
@@ -126,7 +134,8 @@ $(".js-example-basic-single").select2();
 			        "sNext":     "Siguiente",
 			        "sPrevious": "Anterior"
     			}
-        	}
+        	},
+	        
 	    });
 </script>
 @stop

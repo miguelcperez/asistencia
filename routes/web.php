@@ -20,4 +20,7 @@ Route::get('registro', 'PersonalController@create');
 Route::post('registro', 'PersonalController@store');
 
 Route::get('reporte', 'ReportController@index');
+Route::get('reporte/personal', 'ReportController@personalData');
+
+Route::get('reporte/data', 'ReportController@show');
 //Route::get('reporte', 'ReportController@show');
