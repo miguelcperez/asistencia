@@ -12,9 +12,11 @@
 */
 
 Route::get('/', 'AttendanceController@index');
-Route::get('/personal/today', 'AttendanceController@personalToday');
-Route::post('/personal/check-in', 'AttendanceController@checkIn');
-Route::post('/personal/check-out', 'AttendanceController@checkOut');
+Route::get('personal/today', 'AttendanceController@personalToday');
+Route::post('personal/check-in', 'AttendanceController@checkIn');
+Route::post('personal/check-out', 'AttendanceController@checkOut');
+
+Route::post('personal/validate', 'AttendanceController@codeValidate');
 
 Route::get('registro', 'PersonalController@create');
 Route::post('registro', 'PersonalController@store');

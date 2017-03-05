@@ -42,6 +42,7 @@ class AssistsTableSeeder extends Seeder
     private function now()
     {
         $today = Carbon::today();
+        $today->startOfDay();
         $today->addHours(rand(7, 9));
 
         return $today;

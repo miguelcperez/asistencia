@@ -8,6 +8,22 @@
             </div>
         </div>
         <hr>
+        
+        <div class="row" v-show="modal">
+            <h3 v-text="name"></h3>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" v-model="code" placeholder="INGRESE CÓDIGO">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" @click="codeValidate">VERIFICAR</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-success" v-show="alert">
+            <p class="text-center" v-text="alert"></p>
+        </div>
 
         <div class="row">
             <table class="table table-responsive table-bordered">
@@ -27,7 +43,7 @@
                         <td v-text="formatTime(user.entry)"></td>
                         <td>
                             <button type="button" class="btn btn-default" data-toggle="modal"
-                                    @click="checkIn(user)"  data-target=".modal"
+                                    @click="showModal(user, 'entry')"
                                     :disabled="user.entry ? true : false">
                                 Marcar
                             </button>
@@ -35,7 +51,8 @@
                         <td v-text="formatTime(user.exit)"></td>
                         <td>
                             <button type="button" class="btn btn-default" data-toggle="modal"
-                                    @click="checkOut(user)" data-target=".modal"
+                                    @click="showModal(user, 'exit')"
+                                    data-target=".modal"
                                     :disabled="user.exit ? true : false">
                                 Marcar
                             </button>
@@ -49,31 +66,6 @@
             </table>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel" v-text="title"></h4>
-                    </div>
-                    <div class="modal-body">
-                        <form action="/" method="post" class="form-horizontal">
-                            <div class="form-group">
-                                <label for="Code" class="col-sm-4 control-label">Codigo</label>
-                                <div class="col-sm-8">
-                                    <input type="text" v-model="code" id="Code" class="form-control" autocomplete="off">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="codeValidate(code)">Aceptar</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -85,18 +77,15 @@
             return {
                 today: '',
                 users: [],
-                disabledCheckIn: false,
-                disabledCheckOut: false
+                code: '',
+                modal: false,
+                type: '',
+                name: '',
+                alert: ''
             };
         },
         mounted: function() {
-            this.$http.get('/personal/today').then(response => {
-                response.body.forEach(user => {
-                    user.justify = false;
-                });
-
-                this.users = response.body;
-            });
+            this.loadData();
 
             moment.locale('es');
             this. today = moment().format('dddd, LTS');
@@ -106,20 +95,62 @@
             }.bind(this), 1000);
         },
         methods: {
-            checkIn: function (user) {
-                this.title = user.name;
-                this.$http.post('/personal/check-in', {
-                    id: user.id
-                }).then(response => {
-                    user.entry = moment(response.body.created_at).format('LT');
+            loadData: function () {
+                this.$http.get('/personal/today').then(response => {
+                    response.body.forEach(user => {
+                        user.justify = false;
+                    });
+
+                    this.users = response.body;
                 });
             },
-            checkOut: function (user) {
-                this.$http.post('/personal/check-out', {
-                    id: user.id
+
+            showModal: function (user, type) {
+                this.name = user.name;
+                this.type = type;
+                this.modal = true;
+            },
+            checkIn: function (id) {
+                this.$http.post('/personal/check-in', {
+                    id: id
                 }).then(response => {
-                    user.exit = moment(response.body.created_at).format('LT');
+                    this.loadData();
+                    this.alert = 'Entrada registrada!';
+
+                    setTimeout(function () {
+                        this.alert = '';
+                    }.bind(this), 3000);
                 });
+            },
+            checkOut: function (id) {
+                this.$http.post('/personal/check-out', {
+                    id: id
+                }).then(response => {
+                    this.loadData();
+                    this.alert = 'Salida registrada!';
+
+                    setTimeout(function () {
+                        this.alert = '';
+                    }.bind(this), 3000);
+                });
+            },
+            codeValidate: function () {
+                this.$http.post('/personal/validate', {code: this.code})
+                        .then(response => {
+                            console.log(response.body);
+                            this.code = '';
+                            this.modal = false;
+
+                            if (this.type == 'entry') {
+                                this.checkIn(response.body.user.id);
+                            } else {
+                                this.checkOut(response.body.user.id);
+                            }
+                        }).catch(response => {
+                            console.log(response.body);
+                            this.code = '';
+                            alert('Codigo incorrecto!');
+                        });
             },
             formatTime: function (date) {
                 if (date == null) {
@@ -128,12 +159,6 @@
 
                 return moment(date).format('h:mm:ss a');
             },
-            codeValidate: function (code) {
-
-            }
-        },
-        computed: {
-
         }
     }
 </script>
