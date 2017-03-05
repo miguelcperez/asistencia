@@ -15,13 +15,13 @@ class ReportController extends Controller
             ->join('personal', 'assists.personal_id', '=', 'personal.id')
             ->select('assists.created_at', 'personal.name', 'assists.discount')
             ->paginate(10);
-        if($request->ajax()) {
-        	return View('report', ['reports' => $reports])->render();
-        }
     	return  view('report', ['reports' => $reports]);*/
     }
     public function personalData(Request $request)
     {
+    	$reports = \DB::table('assists')
+            ->join('personal', 'assists.personal_id', '=', 'personal.id')
+            ->select('assists.created_at', 'personal.name', 'assists.discount');
     	$assist = (new Assist)->newQuery();
     	if($request->has('id')) {
     		$assist->join('personal', 'assists.personal_id', '=', 'personal.id')
@@ -39,7 +39,7 @@ class ReportController extends Controller
             ->where('assists.created_at','<=',$request->end_date);
     	}
 
-    	return $assist->get();
+    	return $reports->get();
     }
     public function show()
     {

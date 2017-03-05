@@ -116,6 +116,11 @@
 			"processing": true,
 			"serverSide": true,
 	        "ajax": "reporte/personal",
+			"columns": [
+	            { "data": "created_at" },
+	            { "data": "name" },
+	            { "data": "discount" }
+			],
 			"searching": false,
 			"paginate": false,
 			"info": false,
