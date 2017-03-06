@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Personal;
 use App\Assist;
+use Datatables;
+use PDF;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -19,27 +21,29 @@ class ReportController extends Controller
     }
     public function personalData(Request $request)
     {
-    	$reports = \DB::table('assists')
-            ->join('personal', 'assists.personal_id', '=', 'personal.id')
-            ->select('assists.created_at', 'personal.name', 'assists.discount');
+        
     	$assist = (new Assist)->newQuery();
+
+        $assist->join('personal as p1', 'assists.personal_id', '=', 'p1.id')
+            ->select('assists.created_at', 'p1.name', 'assists.discount');
     	if($request->has('id')) {
     		$assist->join('personal', 'assists.personal_id', '=', 'personal.id')
             ->select('assists.created_at', 'personal.name', 'assists.discount')
             ->where('assists.personal_id',$request->id);
+            return Datatables::of($assist)->make(true);
     	}
     	if($request->has('init_date')) {
-    		$assist->join('personal as p1', 'assists.personal_id', '=', 'p1.id')
-            ->select('assists.created_at', 'p1.name', 'assists.discount')
+    		$assist->join('personal as p2', 'assists.personal_id', '=', 'p2.id')
+            ->select('assists.created_at', 'p2.name', 'assists.discount')
             ->where('assists.created_at','>=',$request->init_date);
     	}
     	if($request->has('end_date')) {
-    		$assist->join('personal as p2', 'assists.personal_id', '=', 'p2.id')
-            ->select('assists.created_at', 'p2.name', 'assists.discount')
+    		$assist->join('personal as p3', 'assists.personal_id', '=', 'p3.id')
+            ->select('assists.created_at', 'p3.name', 'assists.discount')
             ->where('assists.created_at','<=',$request->end_date);
     	}
-
-    	return $reports->get();
+        
+    	return Datatables::of($assist)->make(true);
     }
     public function show()
     {

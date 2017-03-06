@@ -8,6 +8,7 @@
 	<div class="row" style="margin-bottom: 30px">
 		<div class="col-xs-4">
 			<select class="js-example-basic-single" style="width: 100%">
+			<option id="0"></option>
 			</select>
 		</div>
 		<div class="col-xs-1" style="text-align: right;">
@@ -40,16 +41,15 @@
 					<th>Día</th>
 					<th>Trabajador</th>
 					<th>Descuento</th>
-					<th>Detalles</th>
 				</tr>
 			</thead>
 		</table>
 	</div>
 	<div class="row">
 		<div class="col-md-4">
-			<button type="button" class="btn btn-primary">Generar Total</button>
+			<button type="button" class="btn btn-primary" id="TotalButton">Generar Total</button>
 		</div>
-		<label class="col-md-4 control-label"></label>
+		<input type="text" class="col-md-4 form-control" id="" disabled="disabled" style="margin-top: 20px"></label>
 	</div>
 </div>
 @stop
@@ -63,6 +63,47 @@
 <script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
+	$('#TotalButton').on("click", function(){
+		$.ajax({
+			type: 'GET',
+			url:'reporte/total',
+			dataType: 'json',
+		}).then(function(data) {
+			for(var i in data) {
+				var newOption = new Option(data[i].name, data[i].id, true, true);
+				$(".js-example-basic-single").append(newOption);
+			}
+		});
+	});
+	$('#AssistanceTable').DataTable({
+		"processing": true,
+		"serverSide": true,
+        "ajax": "reporte/personal",
+        "columns": [
+	        {data:"created_at"},
+	        {data:"name"},
+	        {data:"discount"}
+        ],
+		"searching": false,
+		"info": false,
+		"legend": false,
+    	"language": {
+            "lengthMenu": "Ver _MENU_ registros por página",
+            "sSearch": "Buscar:",
+            "sProcessing": "Procesando",
+            "zeroRecords": "No se encontraron resultados",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(Filtrado de  _MAX_ registros totales)",
+            "oPaginate": {
+		        "sFirst":    "Primero",
+		        "sLast":     "Último",
+		        "sNext":     "Siguiente",
+		        "sPrevious": "Anterior"
+			}
+    	},
+        
+    });
 	$.ajax({
 		type: 'GET',
 		url:'reporte/data',
@@ -73,22 +114,22 @@
 			$(".js-example-basic-single").append(newOption);
 		}
 	});
-	
-	$(".js-example-basic-single").select2({
-		
-	});
 	$(".js-example-basic-single").on("select2:select", function(e) {
 		var id = $(this).val();
 		$.ajax ({
 			type: "GET",
-			url: "reporte",
+			url: "reporte/personal",
 			data: {
 				id: id
 			},
 			success: function (data) {
-				
+				$('#AssistanceTable').DataTable().ajax.reload();
 			}
 		});
+	});
+	$(".js-example-basic-single").select2({
+		placeholder: "Seleccione un Trabajador",
+		allowClear: "true"
 	});
 	$.fn.datepicker.dates['es'] = {
 	    days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
@@ -112,35 +153,6 @@
 	    format: 'dd/mm/yyyy',
 	    autoclose: 'true'
 	});
-	$('#AssistanceTable').DataTable({
-			"processing": true,
-			"serverSide": true,
-	        "ajax": "reporte/personal",
-			"columns": [
-	            { "data": "created_at" },
-	            { "data": "name" },
-	            { "data": "discount" }
-			],
-			"searching": false,
-			"paginate": false,
-			"info": false,
-			"legend": false,
-	    	"language": {
-	            "lengthMenu": "Ver _MENU_ registros por página",
-	            "sSearch": "Buscar:",
-	            "sProcessing": "Procesando",
-	            "zeroRecords": "No se encontraron resultados",
-	            "info": "Página _PAGE_ de _PAGES_",
-	            "infoEmpty": "No hay registros disponibles",
-	            "infoFiltered": "(Filtrado de  _MAX_ registros totales)",
-	            "oPaginate": {
-			        "sFirst":    "Primero",
-			        "sLast":     "Último",
-			        "sNext":     "Siguiente",
-			        "sPrevious": "Anterior"
-    			}
-        	},
-	        
-	    });
+	
 </script>
 @stop
