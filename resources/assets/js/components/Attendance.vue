@@ -125,7 +125,7 @@
                 if (date == null) {
                     return '';
                 }
-                
+
                 return moment(date).format('h:mm:ss a');
             },
             codeValidate: function (code) {

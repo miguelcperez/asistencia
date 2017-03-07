@@ -14,7 +14,7 @@ class AssistsTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = Personal::today()->get();
+        $users = Personal::today();
         $random = $users->random(5);
 
         foreach ($random as $user) {
@@ -25,7 +25,6 @@ class AssistsTableSeeder extends Seeder
                 'entry' =>  $today->addMinutes(rand(1, 30)),
                 'exit' =>  $today->addHours(4),
                 'personal_id' => $user->id,
-                'created_at' => $today
             ]);
         }
 
@@ -36,7 +35,6 @@ class AssistsTableSeeder extends Seeder
                 'entry' =>  $today->addMinutes(rand(1, 30)),
                 'exit' =>  $today->addHours(4),
                 'personal_id' => $user->id,
-                'created_at' => $today
             ]);
         }
     }
