@@ -15,18 +15,15 @@ class CreateAssistsTable extends Migration
     {
         Schema::create('assists', function (Blueprint $table) {
             $table->increments('id');
-
-            $table->enum('type', ['entry', 'exit']);
-
-            $table->string('hour');
-            
-            $table->decimal('discount', 5,2)->default('0');
-
+            $table->dateTime('entry')->nullable();
+            $table->dateTime('exit')->nullable();
+            $table->decimal('discount')->default(0);
             $table->integer('personal_id')->unsigned();
 
-            $table->foreign('personal_id')->references('id')
-                ->on('personal')->onDelete('cascade');
-
+            $table->foreign('personal_id')
+                ->references('id')
+                ->on('personal')
+                ->onDelete('cascade');
 
             $table->timestamps();
         });

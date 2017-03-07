@@ -17,27 +17,7 @@ class AttendanceController extends Controller
 
     public function personalToday()
     {
-        $weekdays = [
-            'Monday'    => 'LUNES',
-            'Tuesday'   => 'MARTES',
-            'Wednesday' => 'MIERCOLES',
-            'Thursday'  => 'JUEVES',
-            'Friday'    => 'VIERNES',
-            'Saturday'  => 'SABADO',
-            'Sunday'    => 'DOMINGO',
-        ];
-
-        $today = Carbon::now()->format('l');
-
-        $users = \DB::table('personal')
-            ->join('schedule_personal', 'personal.id', '=', 'schedule_personal.personal_id')
-            ->join('schedule', 'schedule.id', '=', 'schedule_personal.schedule_id')
-            ->where('schedule.day', $weekdays[$today])
-            ->groupBy('personal.id')
-            ->select('personal.*')
-            ->get();
-
-        return $users;
+        return Personal::today();
     }
 
     public function checkIn()

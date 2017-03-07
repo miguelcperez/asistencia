@@ -27,3 +27,9 @@ $factory->define(App\Schedule::class, function (Faker\Generator $faker) {
         'end_hour' => $faker->time,
     ];
 });
+
+$factory->define(App\Assist::class, function (Faker\Generator $faker) {
+    return [
+    	'type' => $faker->randomElement(['entry', 'exit']),
+    ];
+});
