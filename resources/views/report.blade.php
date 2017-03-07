@@ -7,7 +7,7 @@
 	<hr>
 	<div class="row" style="margin-bottom: 30px">
 		<div class="col-xs-4">
-			<select class="js-example-basic-single" style="width: 100%">
+			<select id="UserSelect" class="js-example-basic-single" style="width: 100%">
 			<option id="0"></option>
 			</select>
 		</div>
@@ -16,7 +16,7 @@
 		</div>
 		<div class="col-xs-3">
 			<div class="input-group date" data-provide="datepicker" id="dateOne">
-			    <input type="text" name = "init_date" class="form-control">
+			    <input id="init_date" type="text" name = "init_date" class="form-control">
 			    <div class="input-group-addon">
 			        <span class="glyphicon glyphicon-calendar"></span>
 			    </div>
@@ -27,7 +27,7 @@
 		</div>
 		<div class="col-xs-3">
 			<div class="input-group date" data-provide="datepicker" id="dateTwo">
-			    <input type="text" name = "end_date"class="form-control">
+			    <input id="end_date" type="text" name = "end_date"class="form-control">
 			    <div class="input-group-addon">
 			        <span class="glyphicon glyphicon-calendar"></span>
 			    </div>
@@ -75,14 +75,21 @@
 			}
 		});
 	});
-	$('#AssistanceTable').DataTable({
+	var url = "/reporte/personal";
+
+	var table = $('#AssistanceTable').DataTable({
 		"processing": true,
 		"serverSide": true,
-        "ajax": "reporte/personal",
+        "ajax": {
+			url: '/reporte/personal',
+			data: function(d){
+				d.id = $('#UserSelect').val();
+			}
+		},
         "columns": [
-	        {data:"created_at"},
-	        {data:"name"},
-	        {data:"discount"}
+	        {data:'created_at', name: 'assists.created_at'},
+	        {data:'name', name: 'personal.name'},
+	        {data:'discount', name: 'assists.discount'}
         ],
 		"searching": false,
 		"info": false,
@@ -101,7 +108,7 @@
 		        "sNext":     "Siguiente",
 		        "sPrevious": "Anterior"
 			}
-    	},
+    	}
         
     });
 	$.ajax({
@@ -114,8 +121,11 @@
 			$(".js-example-basic-single").append(newOption);
 		}
 	});
+
 	$(".js-example-basic-single").on("select2:select", function(e) {
 		var id = $(this).val();
+		table.draw();
+		/*
 		$.ajax ({
 			type: "GET",
 			url: "reporte/personal",
@@ -123,9 +133,13 @@
 				id: id
 			},
 			success: function (data) {
-				$('#AssistanceTable').DataTable().ajax.reload();
+				console.log('hola');
+				var link = url+'?id='+id;
+				table.ajax.url = link;
+				table.ajax.reload();
 			}
 		});
+		*/
 	});
 	$(".js-example-basic-single").select2({
 		placeholder: "Seleccione un Trabajador",
