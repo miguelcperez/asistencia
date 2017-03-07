@@ -17,7 +17,7 @@ class AttendanceController extends Controller
 
     public function personalToday()
     {
-        return Personal::today();
+        return Personal::assistToday();
     }
 
     public function checkIn()
