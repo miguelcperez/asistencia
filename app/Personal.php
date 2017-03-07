@@ -74,7 +74,7 @@ class Personal extends Model
             ) AS U
             LEFT JOIN (
                 SELECT * fROM assists
-                WHERE entry between '$start' AND '$end'
+                WHERE created_at between '$start' AND '$end'
             ) AS A
             ON U.id = A.personal_id
         ";

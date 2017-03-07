@@ -22,27 +22,67 @@ class AttendanceController extends Controller
 
     public function checkIn()
     {
-        $today = Carbon::now();
-        $hour = substr($today->toTimeString(),0,5);
         $this->validate(request(), ['id' => 'required|exists:personal,id']);
+
+        $assists = Assist::where('personal_id', request('id'))
+            ->whereBetween('created_at', [
+                Carbon::today()->startOfDay(), Carbon::today()->endOfDay()
+            ])
+            ->get();
+
+        if ($assists->count() > 0) {
+            $assist = $assists->first();
+            $assist->entry = Carbon::now();
+            $assist->save();
+
+            return $assist;
+        }
+
         return Assist::create([
             'personal_id' => request('id'),
-            'type'        => 'entry', 
-            'hour'        => $hour, 
+            'entry'        => Carbon::now(),
             'discount'    => '0'
         ]);
     }
 
     public function checkOut()
     {
-        $today = Carbon::now();
-        $hour = substr($today->toTimeString(),0,5);
         $this->validate(request(), ['id' => 'required|exists:personal,id']);
+
+        $assists = Assist::where('personal_id', request('id'))
+            ->whereBetween('created_at', [
+                Carbon::today()->startOfDay(), Carbon::today()->endOfDay()
+            ])
+            ->get();
+
+        if ($assists->count() > 0) {
+            $assist = $assists->first();
+            $assist->exit = Carbon::now();
+            $assist->save();
+
+            return $assist;
+        }
+
         return Assist::create([
             'personal_id' => request('id'),
-            'type'        => 'exit',
-            'hour'        => $hour,
+            'exit'        => Carbon::now(),
             'discount'    => '0'
         ]);
+    }
+
+    public function codeValidate()
+    {
+        $user = Personal::where('code', request('code'))->first();
+
+        if ($user) {
+            return response()->json([
+                'status' => 'success',
+                'user' => $user
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'fail',
+        ], 422);
     }
 }
