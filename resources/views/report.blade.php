@@ -8,7 +8,7 @@
 	<div class="row" style="margin-bottom: 30px">
 		<div class="col-xs-4">
 			<select id="UserSelect" class="js-example-basic-single" style="width: 100%">
-			<option id="0"></option>
+			<option id="0">Seleccione un Trabajador</option>
 			</select>
 		</div>
 		<div class="col-xs-1" style="text-align: right;">
@@ -16,7 +16,8 @@
 		</div>
 		<div class="col-xs-3">
 			<div class="input-group date" data-provide="datepicker" id="dateOne">
-			    <input id="init_date" type="text" name = "init_date" class="form-control">
+			    <input id="InitDate" type="text" name = "init_date" class="form-control">
+			    <input type="hidden" id="date_init">
 			    <div class="input-group-addon">
 			        <span class="glyphicon glyphicon-calendar"></span>
 			    </div>
@@ -27,7 +28,7 @@
 		</div>
 		<div class="col-xs-3">
 			<div class="input-group date" data-provide="datepicker" id="dateTwo">
-			    <input id="end_date" type="text" name = "end_date"class="form-control">
+			    <input id="EndDate" type="text" name = "end_date" class="form-control">
 			    <div class="input-group-addon">
 			        <span class="glyphicon glyphicon-calendar"></span>
 			    </div>
@@ -84,6 +85,8 @@
 			url: '/reporte/personal',
 			data: function(d){
 				d.id = $('#UserSelect').val();
+				d.init_date = $('#InitDate').val();
+				d.end_date = $('#EndDate').val();
 			}
 		},
         "columns": [
@@ -111,19 +114,8 @@
     	}
         
     });
-	$.ajax({
-		type: 'GET',
-		url:'reporte/data',
-		dataType: 'json',
-	}).then(function(data) {
-		for(var i in data) {
-			var newOption = new Option(data[i].name, data[i].id, true, true);
-			$(".js-example-basic-single").append(newOption);
-		}
-	});
-
-	$(".js-example-basic-single").on("select2:select", function(e) {
-		var id = $(this).val();
+	
+	$(".js-example-basic-single").on("select2:select", function(e) {	
 		table.draw();
 		/*
 		$.ajax ({
@@ -141,8 +133,17 @@
 		});
 		*/
 	});
+	$.ajax({
+		type: 'GET',
+		url:'reporte/data',
+		dataType: 'json',
+	}).then(function(data) {
+		for(var i in data) {
+			var newOption = new Option(data[i].name, data[i].id, true, true);
+			$(".js-example-basic-single").append(newOption);
+		}
+	});
 	$(".js-example-basic-single").select2({
-		placeholder: "Seleccione un Trabajador",
 		allowClear: "true"
 	});
 	$.fn.datepicker.dates['es'] = {
@@ -159,13 +160,18 @@
 	};
 	$('#dateOne').datepicker({
 		language: 'es',
-	    format: 'dd/mm/yyyy',
+	    format: 'yyyy-mm-dd',
 	    autoclose: 'true'
+	}).on('changeDate', function(){
+		table.draw();
 	});
 	$('#dateTwo').datepicker({
 		language: 'es',
-	    format: 'dd/mm/yyyy',
+	    format: 'yyyy-mm-dd',
 	    autoclose: 'true'
+	}).on('changeDate', function(){
+		var end_date = $('#EndDate').val($('#EndDate').val()+' 23:59:59');
+		table.draw();
 	});
 	
 </script>
