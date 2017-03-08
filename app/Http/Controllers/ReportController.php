@@ -26,8 +26,8 @@ class ReportController extends Controller
 
 
         $assist->join('personal as p1', 'assists.personal_id', '=', 'p1.id')
-           ->select('assists.entry', 'p1.name', 'assists.discount_entry', 'assists.exit', 'assists.discount_exit');
-
+           ->select('assists.entry', 'p1.name', 'assists.discount_entry', 'assists.exit', 'assists.discount_exit')
+           ->sum('assists.discount_entry', 'as', 'suma');
     	if($request->has('id')) {
             $assist->where('assists.personal_id',$request->id);
     	}
