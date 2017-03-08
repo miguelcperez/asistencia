@@ -39,9 +39,11 @@
 		<table class="display" cellspacing="0" width="100%" id="AssistanceTable">
 			<thead>
 				<tr>
-					<th>Día</th>
-					<th>Trabajador</th>
-					<th>Descuento</th>
+					<th>Entrada</th>
+					<th>Dscto.</th>
+                    <th>Salida</th>
+                    <th>Dscto.</th>
+                    <th>Trabajador</th>
 				</tr>
 			</thead>
 		</table>
@@ -90,9 +92,11 @@
 			}
 		},
         "columns": [
-	        {data:'created_at', name: 'assists.created_at'},
-	        {data:'name', name: 'personal.name'},
-	        {data:'discount', name: 'assists.discount'}
+            {data:'entry', name: 'assists.entry'},
+            {data:'discount_entry', name: 'assists.discount_entry'},
+            {data:'exit', name: 'assists.exit'},
+            {data:'discount_exit', name: 'assists.discount_exit'},
+            {data:'name', name: 'personal.name'}
         ],
 		"searching": false,
 		"info": false,
@@ -136,7 +140,7 @@
 	$.ajax({
 		type: 'GET',
 		url:'reporte/data',
-		dataType: 'json',
+		dataType: 'json'
 	}).then(function(data) {
 		for(var i in data) {
 			var newOption = new Option(data[i].name, data[i].id, true, true);
@@ -144,6 +148,7 @@
 		}
 	});
 	$(".js-example-basic-single").select2({
+		placeholder: 'Seleccione un trabajador',
 		allowClear: "true"
 	});
 	$.fn.datepicker.dates['es'] = {

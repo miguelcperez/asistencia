@@ -41,7 +41,7 @@ class AttendanceController extends Controller
         return Assist::create([
             'personal_id' => request('id'),
             'entry'        => Carbon::now(),
-            'discount'    => '0'
+            'discount_entry'    => '0'
         ]);
     }
 
@@ -66,7 +66,7 @@ class AttendanceController extends Controller
         return Assist::create([
             'personal_id' => request('id'),
             'exit'        => Carbon::now(),
-            'discount'    => '0'
+            'discount_exit'    => '0'
         ]);
     }
 

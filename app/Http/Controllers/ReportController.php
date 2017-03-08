@@ -25,9 +25,8 @@ class ReportController extends Controller
     	$assist = (new Assist)->newQuery();
 
 
-
         $assist->join('personal as p1', 'assists.personal_id', '=', 'p1.id')
-           ->select(  'assists.created_at','p1.name' ,'assists.discount');
+           ->select('assists.entry', 'p1.name', 'assists.discount_entry', 'assists.exit', 'assists.discount_exit');
 
     	if($request->has('id')) {
             $assist->where('assists.personal_id',$request->id);
@@ -40,8 +39,6 @@ class ReportController extends Controller
     	if($request->has('end_date')) {
     		$assist->where('assists.created_at','<=',$request->end_date);
     	}
-
-        
     	return Datatables::of($assist)->make(true);
         //return $assist->get();
     }

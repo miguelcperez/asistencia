@@ -16,10 +16,10 @@ class CreateAssistsTable extends Migration
         Schema::create('assists', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTime('entry')->nullable();
+            $table->decimal('discount_entry')->default(0);
             $table->dateTime('exit')->nullable();
-            $table->decimal('discount')->default(0);
+            $table->decimal('discount_exit')->default(0);
             $table->integer('personal_id')->unsigned();
-
             $table->foreign('personal_id')
                 ->references('id')
                 ->on('personal')
