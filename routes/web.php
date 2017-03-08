@@ -25,4 +25,7 @@ Route::get('reporte', 'ReportController@index');
 Route::get('reporte/personal', 'ReportController@personalData');
 
 Route::get('reporte/data', 'ReportController@show');
+
+Route::get('reporte/total', 'ReportController@total');
+
 //Route::get('reporte', 'ReportController@show');

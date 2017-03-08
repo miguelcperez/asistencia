@@ -7748,4 +7748,11 @@ body {
   margin: 0 auto;
 }
 
+.total-input {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 36px;
+  height: 70px;
+}
+
 /*# sourceMappingURL=app.css.map */

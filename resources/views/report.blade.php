@@ -52,7 +52,7 @@
 		<div class="col-md-4">
 			<button type="button" class="btn btn-primary" id="TotalButton">Generar Total</button>
 		</div>
-		<input type="text" class="col-md-4 form-control" id="" disabled="disabled" style="margin-top: 20px"></label>
+		<input type="text" class="col-md-4 form-control total-input" id="TotalDiscount" disabled="disabled"/>
 	</div>
 </div>
 @stop
@@ -70,12 +70,14 @@
 		$.ajax({
 			type: 'GET',
 			url:'reporte/total',
-			dataType: 'json',
-		}).then(function(data) {
-			for(var i in data) {
-				var newOption = new Option(data[i].name, data[i].id, true, true);
-				$(".js-example-basic-single").append(newOption);
+			data: {
+				id : $('#UserSelect').val(),
+				init_date : $('#InitDate').val(),
+				end_date : $('#EndDate').val()
 			}
+		}).then(function(data) {
+			console.log(data);
+			$('#TotalDiscount').val(data);
 		});
 	});
 	var url = "/reporte/personal";
