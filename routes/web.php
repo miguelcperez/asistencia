@@ -13,7 +13,7 @@
 
 Route::get('/', 'AttendanceController@index');
 Route::get('personal/today', 'AttendanceController@personalToday');
-Route::post('personal/check-in', 'AttendanceController@checkIn');
+Route::get('personal/check-in', 'AttendanceController@checkIn');
 Route::post('personal/check-out', 'AttendanceController@checkOut');
 
 Route::post('personal/validate', 'AttendanceController@codeValidate');
@@ -28,4 +28,9 @@ Route::get('reporte/data', 'ReportController@show');
 
 Route::get('reporte/total', 'ReportController@total');
 
+Route::get('reporte/{id}/{state}', 'ReportController@changeState');
+
+Route::get('reporte/pdf', 'ReportController@printPdf');
+
+Route::get('personal/checkin', 'AttendanceController@check');
 //Route::get('reporte', 'ReportController@show');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Schedule;
 use App\Assist;
 use App\Personal;
 use Carbon\Carbon;
@@ -20,9 +21,43 @@ class AttendanceController extends Controller
         return Personal::assistToday();
     }
 
+    public function check()
+    {
+        $weekdays = [
+            'Monday'    => 'LUNES',
+            'Tuesday'   => 'MARTES',
+            'Wednesday' => 'MIERCOLES',
+            'Thursday'  => 'JUEVES',
+            'Friday'    => 'VIERNES',
+            'Saturday'  => 'SABADO',
+            'Sunday'    => 'DOMINGO',
+        ];
+        $today = Carbon::now()->format('l');
+        //return Carbon::now()->diffInMinutes(Carbon::now()->addMinutes(10));
+        
+        $sched_personal = DB::table('schedule')
+            ->join('schedule_personal', 'schedule.id', '=', 'schedule_personal.schedule_id')
+            ->where('schedule_personal.personal_id', 2)
+            ->where('schedule.day', $weekdays[$today])->first();
+
+    }
     public function checkIn()
     {
         $this->validate(request(), ['id' => 'required|exists:personal,id']);
+
+        $weekdays = [
+            'Monday'    => 'LUNES',
+            'Tuesday'   => 'MARTES',
+            'Wednesday' => 'MIERCOLES',
+            'Thursday'  => 'JUEVES',
+            'Friday'    => 'VIERNES',
+            'Saturday'  => 'SABADO',
+            'Sunday'    => 'DOMINGO',
+        ];
+
+        $today = Carbon::now()->format('1');
+        $sched_personal = Schedule::where('personal_id', request('id'))
+            ->where('day', $weekdays[$today]);
 
         $assists = Assist::where('personal_id', request('id'))
             ->whereBetween('created_at', [
@@ -72,8 +107,9 @@ class AttendanceController extends Controller
 
     public function codeValidate()
     {
-        $user = Personal::where('code', request('code'))->first();
-
+        $user = Personal::where('code', request('code'))    
+        ->where('id', request('id'))->first();
+ 
         if ($user) {
             return response()->json([
                 'status' => 'success',

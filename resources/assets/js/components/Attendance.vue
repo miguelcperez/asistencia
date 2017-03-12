@@ -13,6 +13,7 @@
             <h3 v-text="name"></h3>
             <div class="form-group">
                 <div class="input-group">
+                    <input type="hidden" v-text="id" name="idPersonal" v-model="id">
                     <input type="text" class="form-control" v-model="code" placeholder="INGRESE CÓDIGO">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" @click="codeValidate">VERIFICAR</button>
@@ -34,7 +35,7 @@
                         <th>Acción</th>
                         <th>Hora de Salida</th>
                         <th>Acción</th>
-                        <th>Justificar</th>
+                        <!-- <th>Justificar</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -57,10 +58,10 @@
                                 Marcar
                             </button>
                         </td>
-                        <td>
+                        <!-- <td>
                             <input v-model="user.justify" type="checkbox">
                             <input type="hidden" v-model="user.code">
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -81,7 +82,8 @@
                 modal: false,
                 type: '',
                 name: '',
-                alert: ''
+                alert: '',
+                id: ''
             };
         },
         mounted: function() {
@@ -107,6 +109,7 @@
 
             showModal: function (user, type) {
                 this.name = user.name;
+                this.id = user.id;
                 this.type = type;
                 this.modal = true;
             },
@@ -135,7 +138,7 @@
                 });
             },
             codeValidate: function () {
-                this.$http.post('/personal/validate', {code: this.code})
+                this.$http.post('/personal/validate', {code: this.code, id: this.id})
                         .then(response => {
                             console.log(response.body);
                             this.code = '';

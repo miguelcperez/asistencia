@@ -16,7 +16,7 @@ class ReportController extends Controller
         $assist = (new Assist)->newQuery();
 
         $assist->join('personal as p1', 'assists.personal_id', '=', 'p1.id')
-            ->select('assists.entry', 'p1.name', 'assists.discount_entry', 'assists.exit', 'assists.discount_exit');
+            ->select('assists.id','assists.entry', 'p1.name', 'assists.discount_entry', 'assists.exit', 'assists.discount_exit', 'assists.justify');
 
         if($request->has('id')) {
             $assist->where('assists.personal_id',$request->id);
@@ -45,9 +45,20 @@ class ReportController extends Controller
     }
     public function personalData(Request $request)
     {
-
-
-    	return Datatables::of($this->report($request))->make(true);
+    	return Datatables::of($this->report($request))
+            ->addColumn('action', function ($assist) {
+                $id = $assist->id;
+                $state = $assist->justify;
+                    return '<button class="btn btn-xs btn-primary btn-action" data-remote="/reporte/'.$id.'/'.$state.'">
+                    <i class="glyphicon glyphicon-plus"></i> Justificar</button>';
+                })
+            ->editColumn('justify', function($assist){
+                if($assist->justify == 0){
+                    return 'No';
+                } else {
+                    return 'Si';
+                }
+            })->make(true);
         //return $assist->get();
     }
     public function show()
@@ -59,8 +70,25 @@ class ReportController extends Controller
 
     public function total(Request $request)
     {
-        $sum = $this->report($request)->sum('assists.discount_entry')
-            + $this->report($request)->sum('assists.discount_exit');
+        $sum = $this->report($request)->where('justify', '=', '0')->sum('assists.discount_entry')
+            + $this->report($request)->where('justify', '=', '0')->sum('assists.discount_exit');
         return $sum;
+    }
+
+    public function changeState($id, $state)
+    {
+        $assist = (New Assist)->newQuery();
+        $assist->select('assists.id', 'assists.justify');
+        if($state == 0) {
+            return $assist->where('assists.id', '=', $id)->update(['assists.justify' => 1]);
+        } else {
+            return $assist->where('assists.id', '=', $id)->update(['assists.justify' => 0]);
+        }
+    }
+
+    public function printPdf() 
+    {
+        $pdf = PDF::loadView('report');
+        return $pdf->download('reporte.pdf');
     }
 }

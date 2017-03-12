@@ -5,7 +5,7 @@
 		<h1>Reportes de Asistencia</h2>
 	</div>
 	<hr>
-	<div class="row" style="margin-bottom: 30px">
+	<div class="row" style="margin-bottom: 30px;">
 		<div class="col-xs-4">
 			<select id="UserSelect" class="js-example-basic-single" style="width: 100%">
 			<option id="0">Seleccione un Trabajador</option>
@@ -41,9 +41,11 @@
 				<tr>
 					<th>Entrada</th>
 					<th>Dscto.</th>
-                    <th>Salida</th>
-                    <th>Dscto.</th>
-                    <th>Trabajador</th>
+	                <th>Salida</th>
+	                <th>Dscto.</th>
+	                <th>Trabajador</th>
+	                <th>Justificado</th>
+	                <th>Accion</th>
 				</tr>
 			</thead>
 		</table>
@@ -57,6 +59,11 @@
 </div>
 @stop
 @section('styles')
+<style type="text/css">
+	@media print {
+	  .noprint { display: none; }
+	}
+</style>
 <link rel="stylesheet" type="text/css" href="/css/libs.css">
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css">
@@ -66,6 +73,7 @@
 <script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
+	
 	$('#TotalButton').on("click", function(){
 		$.ajax({
 			type: 'GET',
@@ -98,7 +106,9 @@
             {data:'discount_entry', name: 'assists.discount_entry'},
             {data:'exit', name: 'assists.exit'},
             {data:'discount_exit', name: 'assists.discount_exit'},
-            {data:'name', name: 'personal.name'}
+            {data:'name', name: 'personal.name'},
+            {data: 'justify', name: 'assists.justify'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
         ],
 		"searching": false,
 		"info": false,
@@ -180,6 +190,19 @@
 		var end_date = $('#EndDate').val($('#EndDate').val()+' 23:59:59');
 		table.draw();
 	});
-	
+	$('#AssistanceTable').on('click', '.btn-action[data-remote]', function () { 
+		var url = $(this).data('remote');
+		$.ajax({
+			type: 'GET',
+			url: url,
+			data: {
+				id : $('#UserSelect').val(),
+				init_date : $('#InitDate').val(),
+				end_date : $('#EndDate').val()
+			}
+		}).then(function(data) {
+			table.draw();
+		});
+	});
 </script>
 @stop
