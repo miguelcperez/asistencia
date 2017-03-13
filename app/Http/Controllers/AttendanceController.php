@@ -43,7 +43,7 @@ class AttendanceController extends Controller
         $personal = Personal::find($request->get('id'));
         $schedules = $personal->schedules->where('day', todayES())->all();
         $discount = 0;
-
+        $nowEntry = $now;
         foreach ($schedules as $schedule) {
             $entryTime = Carbon::createFromFormat('H:i:s', $schedule->init_hour);
 
@@ -54,28 +54,50 @@ class AttendanceController extends Controller
                     $discount += 2; // PEN
                 } elseif ($difference > 10) {
                     $discount += $personal->payperhour;
+                    $nowEntry = $entryTime;
                 }
             }
         }
 
         return Assist::create([
             'personal_id'       => $request->get('id'),
-            'entry'             => $now,
+            'entry'             => $nowEntry,
             'discount_entry'    => $discount
         ]);
     }
 
     public function checkOut(AssistRequest $request)
     {
+        $now = Carbon::now();
         $assists = Assist::where('personal_id', request('id'))
             ->whereBetween('created_at', [
                 Carbon::today()->startOfDay(), Carbon::today()->endOfDay()
             ])
             ->get();
+        // Computed discount
+        $personal = Personal::find($request->get('id'));
+        $schedules = $personal->schedules->where('day', todayES())->all();
+        $discount = 0;
+        $nowExit = $now;
+        foreach ($schedules as $schedule) {
+            $exitTime = Carbon::createFromFormat('H:i:s', $schedule->end_hour);
+
+            if ( $now->gte($exitTime->copy()->addMinute()) ) {
+                $difference = $now->diffInMinutes($exitTime);
+
+                if ($difference <= 30) {
+                    $nowExit = $exitTime;
+                } elseif ($difference > 30) {
+                    $discount += 2;
+                    $nowExit = $exitTime;
+                }
+            }
+        }
 
         if ($assists->count() > 0) {
             $assist = $assists->first();
-            $assist->exit = Carbon::now();
+            $assist->exit = $nowExit;
+            $assist->discount_exit = $discount;
             $assist->save();
 
             return $assist;
