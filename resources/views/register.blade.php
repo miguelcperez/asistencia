@@ -56,48 +56,53 @@
 					<div class="panel-body text-center">
 						<div class="col-sm-2 col-sm-offset-1" data-toggle="button">
 							<h4>Lunes</h4>
-							<button type="button" class="btn btn-default btn-block btn-hour">7:00 - 8:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">8:00 - 9:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">9:00 - 10:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">10:00 - 11:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 12:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">12:00 - 13:00</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">7:30 - 8:25</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">8:25 - 9:10</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:10 - 9:55</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:55 - 10:40</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 11:50</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:50 - 12:35</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">12:35 - 13:20</button>
 						</div>
 						<div class="col-sm-2" data-toggle="button">
 							<h4>Martes</h4>
-							<button type="button" class="btn btn-default btn-block btn-hour">7:00 - 8:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">8:00 - 9:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">9:00 - 10:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">10:00 - 11:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 12:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">12:00 - 13:00</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">7:30 - 8:25</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">8:25 - 9:10</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:10 - 9:55</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:55 - 10:40</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 11:50</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:50 - 12:35</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">12:35 - 13:20</button>
 						</div>
 						<div class="col-sm-2" data-toggle="button">
 							<h4>Miercoles</h4>
-							<button type="button" class="btn btn-default btn-block btn-hour">7:00 - 8:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">8:00 - 9:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">9:00 - 10:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">10:00 - 11:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 12:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">12:00 - 13:00</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">7:30 - 8:25</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">8:25 - 9:10</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:10 - 9:55</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:55 - 10:40</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 11:50</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:50 - 12:35</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">12:35 - 13:20</button>
 						</div>
 						<div class="col-sm-2" data-toggle="button">
 							<h4>Jueves</h4>
-							<button type="button" class="btn btn-default btn-block btn-hour">7:00 - 8:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">8:00 - 9:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">9:00 - 10:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">10:00 - 11:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 12:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">12:00 - 13:00</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">7:30 - 8:25</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">8:25 - 9:10</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:10 - 9:55</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:55 - 10:40</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 11:50</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:50 - 12:35</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">12:35 - 13:20</button>
 						</div>
 						<div class="col-sm-2" data-toggle="button">
 							<h4>Viernes</h4>
-							<button type="button" class="btn btn-default btn-block btn-hour">7:00 - 8:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">8:00 - 9:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">9:00 - 10:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">10:00 - 11:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 12:00</button>
-							<button type="button" class="btn btn-default btn-block btn-hour">12:00 - 13:00</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">7:30 - 8:25</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">8:25 - 9:10</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:10 - 9:55</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">9:55 - 10:40</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:00 - 11:50</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">11:50 - 12:35</button>
+							<button type="button" class="btn btn-default btn-block btn-hour">12:35 - 13:20</button>
 						</div>
 						<div class="col-sm-6 col-md-offset-3">
 							<button type="submit" id="BtnSave" class="btn btn-primary btn-block">

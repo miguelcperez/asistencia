@@ -66,6 +66,12 @@
                 </tbody>
             </table>
         </div>
+        <div class="row text-center">
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-default btn-lg" style="text-transform: uppercase;" 
+                @click="endDate()">Terminar Dia</button>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -97,6 +103,14 @@
             }.bind(this), 1000);
         },
         methods: {
+            endDate: function() {
+                this.$http.get('/personal/endDate').then(response => {
+                    this.alert = 'Registros Faltantes Actualizados';
+                }).catch(response => {
+                    console.log(response.body);
+                    alert('Intente Nuevamente!');
+                });
+            },
             loadData: function () {
                 this.$http.get('/personal/today').then(response => {
                     response.body.forEach(user => {
@@ -159,8 +173,7 @@
                 if (date == null) {
                     return '';
                 }
-
-                return moment(date).format('h:mm:ss a');
+                return moment(date).format('h:mm a');
             },
         }
     }

@@ -126,7 +126,7 @@
     });
 	
 	$(".js-example-basic-single").on("select2:select", function(e) {	
-		$('#TitleReport').text('Reporte de Asistencia - ' + $('.js-example-basic-single option:selected').text());
+		$('#TitleReport').text('Reporte de ' + $('.js-example-basic-single option:selected').text());
 		table.draw();
 		/*
 		$.ajax ({

@@ -19,6 +19,15 @@ class AttendanceController extends Controller
 
     public function personalToday()
     {
+        $personal = Personal::assistToday();
+        foreach ($personal as $p) {
+            if(Assist::where('personal_id', $p->id)->whereBetween('created_at', [startOfDay(), endOfDay()])->count() == 0)
+            {
+                Assist::create([
+                    'personal_id'       => $p->id
+                ]);
+            }
+        }
         return Personal::assistToday();
     }
 
@@ -27,23 +36,10 @@ class AttendanceController extends Controller
     {
         $now = Carbon::now();
 
-        $assists = Assist::where('personal_id', $request->get('id'))
-            ->whereBetween('created_at', [startOfDay(), endOfDay()])
-            ->get();
-
-        if ($assists->count() > 0) {
-            $assist = $assists->first();
-            $assist->entry = $now;
-            $assist->save();
-
-            return $assist;
-        }
-
         // Computed discount
         $personal = Personal::find($request->get('id'));
         $schedules = $personal->schedules->where('day', todayES())->all();
         $discount = 0;
-        $nowEntry = $now;
         foreach ($schedules as $schedule) {
             $entryTime = Carbon::createFromFormat('H:i:s', $schedule->init_hour);
 
@@ -54,16 +50,25 @@ class AttendanceController extends Controller
                     $discount += 2; // PEN
                 } elseif ($difference > 10) {
                     $discount += $personal->payperhour;
-                    $nowEntry = $entryTime;
                 }
             }
         }
+        $assists = Assist::where('personal_id', $request->get('id'))
+            ->whereBetween('created_at', [startOfDay(), endOfDay()])
+            ->get();
+        if ($assists->count() > 0) {
+            $assist = $assists->first();
+            $assist->entry = $now;
+            $assist->discount_entry = $discount;
+            $assist->save();
+            return $assist;
+        }
 
-        return Assist::create([
+        /*return Assist::create([
             'personal_id'       => $request->get('id'),
-            'entry'             => $nowEntry,
+            'entry'             => $now,
             'discount_entry'    => $discount
-        ]);
+        ]);*/
     }
 
     public function checkOut(AssistRequest $request)
@@ -78,7 +83,6 @@ class AttendanceController extends Controller
         $personal = Personal::find($request->get('id'));
         $schedules = $personal->schedules->where('day', todayES())->all();
         $discount = 0;
-        $nowExit = $now;
         foreach ($schedules as $schedule) {
             $exitTime = Carbon::createFromFormat('H:i:s', $schedule->end_hour);
 
@@ -86,28 +90,21 @@ class AttendanceController extends Controller
                 $difference = $now->diffInMinutes($exitTime);
 
                 if ($difference <= 30) {
-                    $nowExit = $exitTime;
+                    $discount = 0;
                 } elseif ($difference > 30) {
-                    $discount += 2;
-                    $nowExit = $exitTime;
+                    $discount = 2;
                 }
             }
         }
 
         if ($assists->count() > 0) {
             $assist = $assists->first();
-            $assist->exit = $nowExit;
+            $assist->exit = $exitTime;
             $assist->discount_exit = $discount;
             $assist->save();
 
             return $assist;
         }
-
-        return Assist::create([
-            'personal_id' => request('id'),
-            'exit'        => Carbon::now(),
-            'discount_exit'    => '0'
-        ]);
     }
 
     public function codeValidate()
@@ -124,6 +121,27 @@ class AttendanceController extends Controller
 
         return response()->json([
             'status' => 'fail',
+        ], 422);
+    }
+
+    public function endDate()
+    {
+        $discount = 0;
+        $assists = (new Assist)->newQuery();
+        $assists->where('created_at','>=', startOfDay())
+            ->where('created_at','<=', endOfDay());
+        foreach ($assists as $assist) {
+            $personal = Personal::find($assist->personal_id);
+            return $personal;
+            $schedules = $personal->schedules->where('day', todayES())->all();
+            foreach ($schedules as $schedule) {
+                $discount += $personal->payperhour;
+            }
+            $assist->discount_exit = $discount;
+            $assist->save();
+        }
+        return response()->json([
+            'status' => 'success'
         ], 422);
     }
 }
