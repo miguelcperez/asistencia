@@ -49,7 +49,7 @@ class ReportController extends Controller
             ->addColumn('action', function ($assist) {
                 $id = $assist->id;
                 $state = $assist->justify;
-                    return '<button class="btn btn-xs btn-primary btn-action" data-remote="/reporte/'.$id.'/'.$state.'">
+                    return '<button class="btn btn-xs btn-primary btn-action no-print" data-remote="/reporte/'.$id.'/'.$state.'">
                     <i class="glyphicon glyphicon-plus"></i> Justificar</button>';
                 })
             ->editColumn('justify', function($assist){

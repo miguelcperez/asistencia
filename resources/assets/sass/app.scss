@@ -37,3 +37,10 @@ body {
   font-size: 36px;
   height:70px;
 }
+
+@media print { 
+	.no-print, .no-print * 
+	{ 
+		display: none !important; 
+	} 
+}

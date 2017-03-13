@@ -5,7 +5,7 @@
 		<h1>Reportes de Asistencia</h2>
 	</div>
 	<hr>
-	<div class="row" style="margin-bottom: 30px;">
+	<div class="row no-print" style="margin-bottom: 30px;">
 		<div class="col-xs-4">
 			<select id="UserSelect" class="js-example-basic-single" style="width: 100%">
 			<option id="0">Seleccione un Trabajador</option>
@@ -45,16 +45,16 @@
 	                <th>Dscto.</th>
 	                <th>Trabajador</th>
 	                <th>Justificado</th>
-	                <th>Accion</th>
+	                <th class="no-print">Accion</th>
 				</tr>
 			</thead>
 		</table>
 	</div>
 	<div class="row">
 		<div class="col-md-4">
-			<button type="button" class="btn btn-primary" id="TotalButton">Generar Total</button>
+			<button type="button" class="btn btn-primary no-print" id="TotalButton">Generar Total</button>
 		</div>
-		<input type="text" class="col-md-4 form-control total-input" id="TotalDiscount" disabled="disabled"/>
+		<input type="text" class="col-md-4 form-control total-input no-print" id="TotalDiscount" disabled="disabled"/>
 	</div>
 </div>
 @stop
@@ -72,6 +72,7 @@
 <script type="text/javascript" src="/js/libs.js"></script>
 <script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js"></script>
 <script type="text/javascript">
 	
 	$('#TotalButton').on("click", function(){
@@ -114,7 +115,7 @@
 		"info": false,
 		"legend": false,
     	"language": {
-            "lengthMenu": "Ver _MENU_ registros por página",
+            "lengthMenu": "Viendo _MENU_ registros por página",
             "sSearch": "Buscar:",
             "sProcessing": "Procesando",
             "zeroRecords": "No se encontraron resultados",
