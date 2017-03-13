@@ -181,7 +181,7 @@ return [
 
         /* Yajra DataTable Provider*/
         Yajra\Datatables\DatatablesServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
+        //Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
