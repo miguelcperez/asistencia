@@ -22,26 +22,7 @@ class AttendanceController extends Controller
         return Personal::assistToday();
     }
 
-    public function check()
-    {
-        $weekdays = [
-            'Monday'    => 'LUNES',
-            'Tuesday'   => 'MARTES',
-            'Wednesday' => 'MIERCOLES',
-            'Thursday'  => 'JUEVES',
-            'Friday'    => 'VIERNES',
-            'Saturday'  => 'SABADO',
-            'Sunday'    => 'DOMINGO',
-        ];
-        $today = Carbon::now()->format('l');
-        //return Carbon::now()->diffInMinutes(Carbon::now()->addMinutes(10));
-        
-        $sched_personal = DB::table('schedule')
-            ->join('schedule_personal', 'schedule.id', '=', 'schedule_personal.schedule_id')
-            ->where('schedule_personal.personal_id', 2)
-            ->where('schedule.day', $weekdays[$today])->first();
 
-    }
     public function checkIn(AssistRequest $request)
     {
         $now = Carbon::now();
@@ -70,7 +51,7 @@ class AttendanceController extends Controller
                 $difference = $now->diffInMinutes($entryTime);
 
                 if ($difference <= 10) {
-                    $discount += 10; // PEN
+                    $discount += 2; // PEN
                 } elseif ($difference > 10) {
                     $discount += $personal->payperhour;
                 }

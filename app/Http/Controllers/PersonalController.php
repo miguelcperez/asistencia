@@ -15,7 +15,7 @@ class PersonalController extends Controller
     public function store(Request $request) 
     {
         $this->validate($request, [
-            'code' => 'required|unique:personal|integer',
+            'code' => 'required|unique:personal|alpha_num|size:5',
             'name' => 'required|string',
             'payperhour' => 'required|numeric'
         ]);

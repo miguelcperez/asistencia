@@ -32,5 +32,4 @@ Route::get('reporte/{id}/{state}', 'ReportController@changeState');
 
 Route::get('reporte/pdf', 'ReportController@printPdf');
 
-Route::get('personal/checkin', 'AttendanceController@check');
 //Route::get('reporte', 'ReportController@show');

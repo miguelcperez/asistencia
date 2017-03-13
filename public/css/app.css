@@ -7759,6 +7759,9 @@ body {
   .no-print, .no-print * {
     display: none !important;
   }
+  print {
+    display: block !important;
+  }
 }
 
 /*# sourceMappingURL=app.css.map */

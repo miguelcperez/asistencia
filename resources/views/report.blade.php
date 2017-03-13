@@ -2,13 +2,13 @@
 @section('content')
 <div class="container">
 	<div class="row text-center">
-		<h1>Reportes de Asistencia</h2>
+		<h1 id="TitleReport">Reporte de Asistencia</h1>
 	</div>
 	<hr>
 	<div class="row no-print" style="margin-bottom: 30px;">
 		<div class="col-xs-4">
 			<select id="UserSelect" class="js-example-basic-single" style="width: 100%">
-			<option id="0">Seleccione un Trabajador</option>
+			<option></option>
 			</select>
 		</div>
 		<div class="col-xs-1" style="text-align: right;">
@@ -43,7 +43,7 @@
 					<th>Dscto.</th>
 	                <th>Salida</th>
 	                <th>Dscto.</th>
-	                <th>Trabajador</th>
+	                <!-- <th>Trabajador</th> -->
 	                <th>Justificado</th>
 	                <th class="no-print">Accion</th>
 				</tr>
@@ -59,20 +59,15 @@
 </div>
 @stop
 @section('styles')
-<style type="text/css">
-	@media print {
-	  .noprint { display: none; }
-	}
-</style>
 <link rel="stylesheet" type="text/css" href="/css/libs.css">
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker.min.css">
 @stop
 @section('scripts')
 <script type="text/javascript" src="/js/libs.js"></script>
-<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js"></script>
+<script type="text/javascript" src="/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/js/bootstrap-datepicker.min.js"></script>
+
 <script type="text/javascript">
 	
 	$('#TotalButton').on("click", function(){
@@ -85,8 +80,7 @@
 				end_date : $('#EndDate').val()
 			}
 		}).then(function(data) {
-			console.log(data);
-			$('#TotalDiscount').val(data);
+			$('#TotalDiscount').val('S/.'+data);
 		});
 	});
 	var url = "/reporte/personal";
@@ -107,7 +101,6 @@
             {data:'discount_entry', name: 'assists.discount_entry'},
             {data:'exit', name: 'assists.exit'},
             {data:'discount_exit', name: 'assists.discount_exit'},
-            {data:'name', name: 'personal.name'},
             {data: 'justify', name: 'assists.justify'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ],
@@ -133,6 +126,7 @@
     });
 	
 	$(".js-example-basic-single").on("select2:select", function(e) {	
+		$('#TitleReport').text('Reporte de Asistencia - ' + $('.js-example-basic-single option:selected').text());
 		table.draw();
 		/*
 		$.ajax ({
@@ -156,13 +150,17 @@
 		dataType: 'json'
 	}).then(function(data) {
 		for(var i in data) {
-			var newOption = new Option(data[i].name, data[i].id, true, true);
+			var newOption = new Option(data[i].name, data[i].id, false, false);
 			$(".js-example-basic-single").append(newOption);
 		}
 	});
 	$(".js-example-basic-single").select2({
 		placeholder: 'Seleccione un trabajador',
-		allowClear: "true"
+		allowClear: true,
+		language: {"noResults": function(){
+			           return "No hay Resultados";
+			       }
+		}
 	});
 	$.fn.datepicker.dates['es'] = {
 	    days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
@@ -179,8 +177,11 @@
 	$('#dateOne').datepicker({
 		language: 'es',
 	    format: 'yyyy-mm-dd',
-	    autoclose: 'true'
-	}).on('changeDate', function(){
+	    autoclose: 'true',
+	    startDate:'2017-03-13',
+	}).on('changeDate', function(selected){
+		var minDate = new Date(selected.date.valueOf());
+        $('#dateTwo').datepicker('setStartDate', minDate);
 		table.draw();
 	});
 	$('#dateTwo').datepicker({
