@@ -15,7 +15,7 @@ class AssistsTableSeeder extends Seeder
     public function run()
     {
         $users = Personal::all();
-        $random = $users->random(10);
+        $random = $users->random(5);
 
         foreach ($random as $user) {
             $today = $this->now();

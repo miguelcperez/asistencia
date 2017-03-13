@@ -45,19 +45,6 @@ class AttendanceController extends Controller
     {
         $this->validate(request(), ['id' => 'required|exists:personal,id']);
 
-        $weekdays = [
-            'Monday'    => 'LUNES',
-            'Tuesday'   => 'MARTES',
-            'Wednesday' => 'MIERCOLES',
-            'Thursday'  => 'JUEVES',
-            'Friday'    => 'VIERNES',
-            'Saturday'  => 'SABADO',
-            'Sunday'    => 'DOMINGO',
-        ];
-
-        $today = Carbon::now()->format('1');
-        $sched_personal = Schedule::where('personal_id', request('id'))
-            ->where('day', $weekdays[$today]);
 
         $assists = Assist::where('personal_id', request('id'))
             ->whereBetween('created_at', [
