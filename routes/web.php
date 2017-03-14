@@ -18,10 +18,10 @@ Route::post('personal/check-out', 'AttendanceController@checkOut');
 
 Route::post('personal/validate', 'AttendanceController@codeValidate');
 
-Route::get('registro', 'PersonalController@create');
+Route::get('registro', 'PersonalController@create')->middleware('auth');;
 Route::post('registro', 'PersonalController@store');
 
-Route::get('reporte', 'ReportController@index');
+Route::get('reporte', 'ReportController@index')->middleware('auth');;
 Route::get('reporte/personal', 'ReportController@personalData');
 
 Route::get('reporte/data', 'ReportController@show');
@@ -35,3 +35,6 @@ Route::get('reporte/pdf', 'ReportController@printPdf');
 Route::get('personal/endDate', 'AttendanceController@endDate');
 
 //Route::get('reporte', 'ReportController@show');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
