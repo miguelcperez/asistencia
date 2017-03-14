@@ -6,6 +6,7 @@ use App\Personal;
 use App\Assist;
 use Illuminate\Database\Eloquent\Collection;
 use PDF;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 
@@ -52,6 +53,13 @@ class ReportController extends Controller
                     return '<button class="btn btn-xs btn-primary btn-action no-print" data-remote="/reporte/'.$id.'/'.$state.'">
                     <i class="glyphicon glyphicon-plus"></i> Justificar</button>';
                 })
+            ->editColumn('entry', function($assist){
+                if($assist->entry == Carbon::today()->startOfDay()) {
+                    return 'No asistió';
+                } else {
+                    return $assist->entry;
+                }
+            })
             ->editColumn('justify', function($assist){
                 if($assist->justify == 0){
                     return 'No';
@@ -70,9 +78,14 @@ class ReportController extends Controller
 
     public function total(Request $request)
     {
+        $now = Carbon::now()->startOfDay();
         $sum = $this->report($request)->where('justify', '=', '0')->sum('assists.discount_entry')
             + $this->report($request)->where('justify', '=', '0')->sum('assists.discount_exit');
-        return $sum;
+        $totalDelay = $this->report($request)->where('discount_entry', '>', 0)->count();
+        $totalNoAssist = $this->report($request)->where('entry', '=', $now)->count();
+        return ['total' => $sum,
+                'totalDelay' => $totalDelay,
+                'totalNoAssist' =>$totalNoAssist];
     }
 
     public function changeState($id, $state)

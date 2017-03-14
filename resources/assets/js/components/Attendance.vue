@@ -68,8 +68,8 @@
         </div>
         <div class="row text-center">
             <div class="col-sm-12">
-                <button type="button" class="btn btn-default btn-lg" style="text-transform: uppercase;" 
-                @click="endDate()">Terminar Dia</button>
+                <button type="button" class="btn btn-danger btn-lg" style="text-transform: uppercase;" 
+                @click="endDate()">Completar Asistencia</button>
             </div>
         </div>
 
@@ -106,6 +106,9 @@
             endDate: function() {
                 this.$http.get('/personal/endDate').then(response => {
                     this.alert = 'Registros Faltantes Actualizados';
+                    setTimeout(function () {
+                        this.alert = '';
+                    }.bind(this), 3000);
                 }).catch(response => {
                     console.log(response.body);
                     alert('Intente Nuevamente!');

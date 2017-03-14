@@ -126,22 +126,20 @@ class AttendanceController extends Controller
 
     public function endDate()
     {
+        $now = Carbon::now();
         $discount = 0;
-        $assists = (new Assist)->newQuery();
-        $assists->where('created_at','>=', startOfDay())
-            ->where('created_at','<=', endOfDay());
+        $assists = Assist::where('entry', null)->whereBetween('created_at', [startOfDay(), endOfDay()])->get();
+            $assists->all();
         foreach ($assists as $assist) {
             $personal = Personal::find($assist->personal_id);
-            return $personal;
             $schedules = $personal->schedules->where('day', todayES())->all();
             foreach ($schedules as $schedule) {
                 $discount += $personal->payperhour;
             }
+            $assist->entry = $now->toDateString();
             $assist->discount_exit = $discount;
             $assist->save();
         }
-        return response()->json([
-            'status' => 'success'
-        ], 422);
+        return $assists;
     }
 }

@@ -54,7 +54,17 @@
 		<div class="col-md-4">
 			<button type="button" class="btn btn-primary no-print" id="TotalButton">Generar Total</button>
 		</div>
-		<input type="text" class="col-md-4 form-control total-input no-print" id="TotalDiscount" disabled="disabled"/>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<input type="text" class="form-control total-input " id="TotalNoAssist" disabled="disabled"/>
+		</div>
+		<div class="col-sm-4">
+			<input type="text" class="form-control total-input " id="TotalDiscount" disabled="disabled"/>
+		</div>
+		<div class="col-sm-4">
+			<input type="text" class="form-control total-input " id="TotalDelay" disabled="disabled"/>
+		</div>
 	</div>
 </div>
 @stop
@@ -80,7 +90,9 @@
 				end_date : $('#EndDate').val()
 			}
 		}).then(function(data) {
-			$('#TotalDiscount').val('S/.'+data);
+			$('#TotalDiscount').val('S/.'+data.total);
+			$('#TotalDelay').val(data.totalDelay + ' tardanza(s)');
+			$('#TotalNoAssist').val(data.totalNoAssist + ' falta(s)');
 		});
 	});
 	var url = "/reporte/personal";
