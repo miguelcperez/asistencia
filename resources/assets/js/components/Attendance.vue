@@ -100,6 +100,21 @@
 
             setInterval(function () {
                 this. today = moment().format('dddd, LTS');
+                var arraylength = this.today.length;
+                var hourNow = this.today.substring(arraylength-8, arraylength);
+                if(hourNow == '13:50:00')
+                {
+                    alert('adentro');
+                    this.$http.get('/personal/endDate').then(response => {
+                        this.alert = 'Registros Faltantes Actualizados';
+                        setTimeout(function () {
+                            this.alert = '';
+                        }.bind(this), 3000);
+                    }).catch(response => {
+                        console.log(response.body);
+                        alert('Intente Nuevamente!');
+                    });
+                }
             }.bind(this), 1000);
         },
         methods: {
