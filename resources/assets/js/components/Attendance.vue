@@ -104,11 +104,23 @@
                 this. today = moment().format('dddd, LTS');
                 var arraylength = this.today.length;
                 var hourNow = this.today.substring(arraylength-8, arraylength);
-                
+                if(hourNow == '15:49:40')
+                {
+                    this.$http.get('/personal/validCheckOut').then(response => {
+                        this.loadData();
+                        alert('Registros Faltantes Actualizados Correctamente');
+                        setTimeout(function () {
+                            this.alert = '';
+                        }.bind(this), 3000);
+                    }).catch(response => {
+                        console.log(response.body);
+                        alert('Intente Nuevamente!');
+                    });
+                }
                 if(hourNow == '13:50:00')
                 {
                     this.$http.get('/personal/endDate').then(response => {
-                        alert('Registros Faltantes Actualizados Correctamente');
+                        alert('Las Inasistencias han sido Registradas!');
                         setTimeout(function () {
                             this.alert = '';
                         }.bind(this), 3000);

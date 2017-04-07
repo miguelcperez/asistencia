@@ -33,6 +33,7 @@ Route::get('reporte/{id}/{state}', 'ReportController@changeState');
 Route::get('reporte/pdf', 'ReportController@printPdf');
 
 Route::get('personal/endDate', 'AttendanceController@endDate');
+Route::get('personal/validCheckOut', 'AttendanceController@validCheckOut');
 
 //Route::get('reporte', 'ReportController@show');
 Auth::routes();

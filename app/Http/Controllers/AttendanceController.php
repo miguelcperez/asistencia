@@ -74,26 +74,23 @@ class AttendanceController extends Controller
     public function validCheckOut() 
     {
         $now = Carbon::now();
-        $assists = Assist::where('personal_id', request('id'))
+        $assists = Assist::whereNull('exit')->whereNotNull('entry')
             ->whereBetween('created_at', [
                 Carbon::today()->startOfDay(), Carbon::today()->endOfDay()
-            ])
-            ->get();
+            ])->get();
         // Computed discount
-        $personal = Personal::find($request->get('id'));
-        $schedules = $personal->schedules->where('day', todayES())->all();
-        $discount = 0;
-        foreach ($schedules as $schedule) {
-            $exitTime = Carbon::createFromFormat('H:i:s', $schedule->end_hour);
-
-            if ( $now->gte($exitTime->copy()->addMinute()) ) {
-                $difference = $now->diffInMinutes($exitTime);
-                if(var_dump($now->lt($exitTime))) {
-                    return $exitTime;
-                }
-            }
+        foreach($assists as $assist)
+        {
+            $end_hour = DB::table('schedule')->join('schedule_personal', 'schedule.id', '=', 'schedule_personal.schedule_id')
+                ->where('personal_id', $assist->personal_id)
+                ->where('day', todayES())
+                ->select('schedule_personal.personal_id', 'schedule.day')->max('schedule.end_hour');
+            $exitTime = Carbon::createFromFormat('H:i:s', $end_hour);
+            $setAssist = Assist::where('personal_id', $assist->personal_id)->whereBetween('created_at', [
+                Carbon::today()->startOfDay(), Carbon::today()->endOfDay()])
+                ->update(['exit' => $exitTime, 'discount_exit' => '2.00']);
         }
-        
+        return 'correcto';
     }
     public function checkOut(AssistRequest $request)
     {
@@ -114,8 +111,6 @@ class AttendanceController extends Controller
                 $difference = $now->diffInMinutes($exitTime);
                 if ($difference <= 30) {
                     $discount = 0;
-                } elseif ($difference > 30) {
-                    $discount = 2;
                 }
             }
         }
