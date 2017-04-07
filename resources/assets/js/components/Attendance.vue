@@ -104,7 +104,7 @@
                 this. today = moment().format('dddd, LTS');
                 var arraylength = this.today.length;
                 var hourNow = this.today.substring(arraylength-8, arraylength);
-                if(hourNow == '15:49:40')
+                if(hourNow == '13:45:00')
                 {
                     this.$http.get('/personal/validCheckOut').then(response => {
                         this.loadData();
