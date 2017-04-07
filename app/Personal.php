@@ -66,7 +66,7 @@ class Personal extends Model
 
         $query = "
             SELECT U.*, A.entry, A.exit, A.created_at FROM (
-                SELECT personal.id, personal.name, schedule.day FROM personal
+                SELECT personal.id, personal.name, schedule.day, MAX(schedule.end_hour) AS end_hour_max FROM personal
                 JOIN schedule_personal ON personal.id = schedule_personal.personal_id
                 JOIN schedule ON schedule_personal.schedule_id = schedule.id
                 WHERE schedule.day = '$weekdays[$day]'

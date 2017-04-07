@@ -71,6 +71,30 @@ class AttendanceController extends Controller
         ]);*/
     }
 
+    public function validCheckOut() 
+    {
+        $now = Carbon::now();
+        $assists = Assist::where('personal_id', request('id'))
+            ->whereBetween('created_at', [
+                Carbon::today()->startOfDay(), Carbon::today()->endOfDay()
+            ])
+            ->get();
+        // Computed discount
+        $personal = Personal::find($request->get('id'));
+        $schedules = $personal->schedules->where('day', todayES())->all();
+        $discount = 0;
+        foreach ($schedules as $schedule) {
+            $exitTime = Carbon::createFromFormat('H:i:s', $schedule->end_hour);
+
+            if ( $now->gte($exitTime->copy()->addMinute()) ) {
+                $difference = $now->diffInMinutes($exitTime);
+                if(var_dump($now->lt($exitTime))) {
+                    return $exitTime;
+                }
+            }
+        }
+        
+    }
     public function checkOut(AssistRequest $request)
     {
         $now = Carbon::now();
@@ -88,7 +112,6 @@ class AttendanceController extends Controller
 
             if ( $now->gte($exitTime->copy()->addMinute()) ) {
                 $difference = $now->diffInMinutes($exitTime);
-
                 if ($difference <= 30) {
                     $discount = 0;
                 } elseif ($difference > 30) {
@@ -123,7 +146,6 @@ class AttendanceController extends Controller
             'status' => 'fail',
         ], 422);
     }
-
     public function endDate()
     {
         $now = Carbon::now();

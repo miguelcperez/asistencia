@@ -14,6 +14,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <input type="hidden" v-text="id" name="idPersonal" v-model="id">
+                    <input type="hidden" v-text="end_hour" v-model="end_hour" name="EndHour">
                     <input type="text" class="form-control" v-model="code" placeholder="INGRESE CÓDIGO">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" @click="codeValidate">VERIFICAR</button>
@@ -66,12 +67,12 @@
                 </tbody>
             </table>
         </div>
-        <div class="row text-center">
+        <!-- <div class="row text-center">
             <div class="col-sm-12">
                 <button type="button" class="btn btn-danger btn-lg" style="text-transform: uppercase;" 
                 @click="endDate()">Completar Asistencia</button>
             </div>
-        </div>
+        </div> -->
 
     </div>
 </template>
@@ -89,7 +90,8 @@
                 type: '',
                 name: '',
                 alert: '',
-                id: ''
+                id: '',
+                end_hour: ''
             };
         },
         mounted: function() {
@@ -102,11 +104,11 @@
                 this. today = moment().format('dddd, LTS');
                 var arraylength = this.today.length;
                 var hourNow = this.today.substring(arraylength-8, arraylength);
+                
                 if(hourNow == '13:50:00')
                 {
-                    alert('adentro');
                     this.$http.get('/personal/endDate').then(response => {
-                        this.alert = 'Registros Faltantes Actualizados';
+                        alert('Registros Faltantes Actualizados Correctamente');
                         setTimeout(function () {
                             this.alert = '';
                         }.bind(this), 3000);
@@ -142,6 +144,7 @@
             showModal: function (user, type) {
                 this.name = user.name;
                 this.id = user.id;
+                this.end_hour = user.end_hour_max;
                 this.type = type;
                 this.modal = true;
             },
@@ -163,12 +166,12 @@
                 }).then(response => {
                     this.loadData();
                     this.alert = 'Salida registrada!';
-
                     setTimeout(function () {
                         this.alert = '';
                     }.bind(this), 3000);
                 });
             },
+
             codeValidate: function () {
                 this.$http.post('/personal/validate', {code: this.code, id: this.id})
                         .then(response => {
@@ -179,7 +182,15 @@
                             if (this.type == 'entry') {
                                 this.checkIn(response.body.user.id);
                             } else {
-                                this.checkOut(response.body.user.id);
+
+                                this.now = moment().format('dddd, LTS');
+                                var arrlength = this.now.length;
+                                var hourHere = this.now.substring(arrlength-8, arrlength);
+                                if(hourHere < this.end_hour) {
+                                    alert('Aun no es su hora de salida');
+                                } else {
+                                    this.checkOut(response.body.user.id);
+                                }
                             }
                         }).catch(response => {
                             console.log(response.body);

@@ -71,7 +71,4 @@
     <script type="text/javascript" src="/js/app.js"></script>
     @yield('scripts')
     </body>
-    <footer class="footer no-print">
-        <p>Place sticky footer content here.</p>
-    </footer>
 </html>
